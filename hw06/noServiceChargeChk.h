@@ -30,12 +30,36 @@ class HighInterestChk: public CheckingAcc{
 
     HighInterestChk();
 
+    bool checkBalance(){
+        if (m_balance < m_minBalance) {
+        return false;
+    }
+    return true;
+    };
+
+
     virtual void deposit()override;
     virtual void withdraw()override;
     virtual void print()const override;
     virtual void writeCheck()override;
 
     virtual~HighInterestChk();
+
+    double getInterestRate() const{
+        return m_interest;
+    }
+
+    double getMinBalance() const{
+        return m_minBalance;
+    }
+
+    void setInterestRate(double rate){
+        m_interest = rate;
+    }
+
+    void setMinBalance(double amt){
+        m_minBalance = amt;
+    }
 
     protected:
     double m_interest;
@@ -56,23 +80,25 @@ class CheckingCompat {
 template<typename T>
 class CheckingAdapter: public CheckingCompat {
   public:
-    CheckingAdapter(const T& obj) : obj_(obj) {}
+    CheckingAdapter(T& obj) : obj_(obj) {}
     void addInterest(int time) override {
         std::ofstream out("statements.txt", std::ios::app);
         for(int i = 0; i < time; i++){
-            m_balance *= (m_interest + 1);
-            std::cout << "BALANCE FOR MONTH[" << i+1 << "]: " << m_balance << '\n';
-            out << "BALANCE FOR MONTH[" << i+1 << "]: " << m_balance << '\n';
+            obj_.setBalance(obj_.getBalance() * (obj_.getInterestRate() + 1));
+            std::cout << "BALANCE FOR MONTH[" << i+1 << "]: " << obj_.getBalance() << '\n';
+            out << "BALANCE FOR MONTH[" << i+1 << "]: " << obj_.getBalance() << '\n';
         }
         out.close();
     }
     ~CheckingAdapter() {}
   private:
-    const T& obj_;
+    T& obj_;
 };
   
-int main() {
-  
+int test() {
+  CheckingAdapter test1 = new CheckingAdapter(NoServiceChargeChk());
+  CheckingAdapter test2 = new CheckingAdapter(NoServiceChargeChk());
+
   CheckingCompat *t[] = {new CheckingAdapter(NoServiceChargeChk()),new CheckingAdapter(HighInterestChk())};
   for(auto& x: t){
     x->addInterest(1);

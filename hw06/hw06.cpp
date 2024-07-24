@@ -1,6 +1,6 @@
 #include "highInterestSavings.h"
 #include "serviceChargeChecking.h"
-#include "highInterestChk.h"
+#include "noServiceChargeChk.h"
 #include "cd.h"
 enum ACCOUNTS{SAVINGS = 1, HIGH_INT_SAVE, SERVICE_CHARGE_CHK, NO_SERVICE_CHK,
 HIGH_INT_CHK, CertD};
@@ -115,7 +115,7 @@ int main() {
                                 if(!(s5.checkBalance())) {
                                     std::cout << "Unable to create account -- insufficient funds\n\n";
                                 } else {
-                                    s5.addInterest(months);
+                                    //s5.addInterest(months);
                                     do{
                                         detail = detailsScreenChecking();
                                         switch(detail) {
