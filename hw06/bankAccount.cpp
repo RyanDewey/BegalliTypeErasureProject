@@ -29,6 +29,15 @@ void BankAccount::monthlyStatement()const{
     }
     std::cout << '\n';
 
-}   
+} 
+
+double BankAccount::getBalance()const{
+    return m_balance;
+}
+
+void BankAccount::setBalance(double amt){
+    m_balance = amt; 
+}
+
 
 BankAccount::~BankAccount(){}

@@ -10,6 +10,7 @@ public:
     virtual void print()const override;
     virtual void writeCheck() = 0;
 
+
     virtual ~CheckingAcc();
 };
 

@@ -38,13 +38,12 @@
 
     void SavingsAcc::addInterest(int time) {
         std::ofstream out("statements.txt", std::ios::app);
-        double irAmt = 0.0;
-
-        irAmt = m_balance * m_interest * time;
-        out << "ADDED INTEREST: " << irAmt << '\n';
+        for(int i = 0; i < time; i++){
+            m_balance *= (m_interest + 1);
+            std::cout << "BALANCE FOR MONTH[" << i+1 << "]: " << m_balance << '\n';
+            out << "BALANCE FOR MONTH[" << i+1 << "]: " << m_balance << '\n';
+        }
         out.close();
-
-        m_balance += irAmt;
     }
 
     void SavingsAcc::print()const{

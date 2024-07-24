@@ -81,4 +81,20 @@ void NoServiceChargeChk::writeCheck(){
     withdraw();
 }
 
+double NoServiceChargeChk::getInterestRate() const{
+    return m_interest;
+}
+
+double NoServiceChargeChk::getMinBalance() const{
+    return m_minBalance;
+}
+
+void NoServiceChargeChk::setInterestRate(double rate){
+    m_interest = rate;
+}
+
+void NoServiceChargeChk::setMinBalance(double amt){
+    m_minBalance = amt;
+}
+
 NoServiceChargeChk::~NoServiceChargeChk(){}

@@ -9,6 +9,10 @@ class BankAccount{
     public:
     BankAccount();
 
+    double getBalance() const;
+
+    void setBalance(double);
+
     void getInfo();
     void monthlyStatement()const;
     
