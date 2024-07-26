@@ -34,12 +34,34 @@ int main() {
     test1.setBalance(500);
     test2.setBalance(1000);
 
-    std::cout << "Balance for test1: " << test1.getBalance();
-    std::cout << "Balance for test2: " << test2.getBalance(); 
-    /*CheckingCompat *t[] = {new CheckingAdapter(NoServiceChargeChk()),new CheckingAdapter(HighInterestChk())};
-    for(auto& x: t){
-      x->addInterest(1);
-    }*/
+    std::cout << "Balance for test1: " << test1.getBalance() << std::endl;
+    std::cout << "Balance for test2: " << test2.getBalance() << std::endl; 
+    std::cout << "Setting Balance for test1 to 2000: (and calling getter):";
+    test1.setBalance(2000);
+    std::cout << test1.getBalance() << std::endl;
+    std::cout << "Setting Balance for test2 to 2500: (and calling getter):";
+    test2.setBalance(2500);
+    std::cout << test2.getBalance() << std::endl;
+    std::cout << "Interest Rate for test1: " << test1.getInterestRate() << std::endl;
+    std::cout << "Interest Rate for test2: " << test2.getInterestRate() << std::endl;
+    std::cout << "Adding 1 month of interest to test1, new balance: $";
+    test1.addInterest(1);
+    std::cout << test1.getBalance() << std::endl;
+    std::cout << "Adding 1 month of interest to test2, new balance: $";
+    test2.addInterest(1);
+    std::cout << test2.getBalance() << std::endl;
+    std::cout << "Adding 1 more month of interest to both accounts." << std::endl;
+    test1.addInterest(1);
+    test2.addInterest(1);
+    std::cout << "Test 1 balance: $" << test1.getBalance() << std::endl;
+    std::cout << "Test 2 balance: $" << test2.getBalance() << std::endl;
+
+    CheckingCompat t[] = {CheckingCompat(NoServiceChargeChk()), CheckingCompat(HighInterestChk())};
+    for(auto x: t){
+      x.setBalance(800);
+      x.addInterest(1);
+      std::cout << "Balance: $" << x.getBalance() << std::endl;
+    }
 
 
     /*createAcc = mainScreen();

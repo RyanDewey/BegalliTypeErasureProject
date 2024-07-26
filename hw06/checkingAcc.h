@@ -12,8 +12,9 @@ public:
     virtual void writeCheck() = 0;
     virtual void setBalance(double) = 0;
     virtual double getBalance() = 0;
-    virtual void getInterestRate(double) = 0;
-    virtual void calcInterest(int) = 0;
+    virtual void setInterestRate(double) = 0;
+    virtual double getInterestRate() = 0;
+    virtual void addInterest(int) = 0;
 
 
     virtual ~CheckingAcc();

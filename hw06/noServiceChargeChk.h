@@ -8,7 +8,7 @@ class NoServiceChargeChk: public CheckingAcc{
     public:
 
     NoServiceChargeChk();
-    void addInterest(int time);
+    void addInterest(int time) override;
     bool checkBalance();
 
     virtual void deposit()override;
@@ -25,10 +25,21 @@ class NoServiceChargeChk: public CheckingAcc{
         x->addInterest(1);
     }*/
     double getMinBalance() const;
-    double getInterestRate() const;
+    double getInterestRate() override{
+        return m_interest;
+    }
     
-    void setInterestRate(double);
+    void setInterestRate(double intRate) override{
+        m_interest = intRate;
+    }
     void setMinBalance(double);
+
+    void setBalance(double amt) override{
+        m_balance = amt;
+    }
+    double getBalance() override{
+        return m_balance;
+    }
 
     virtual~NoServiceChargeChk();
 
@@ -57,7 +68,7 @@ class HighInterestChk: public CheckingAcc{
 
     virtual~HighInterestChk();
 
-    double getInterestRate() const{
+    double getInterestRate() override{
         return m_interest;
     }
 
@@ -65,13 +76,31 @@ class HighInterestChk: public CheckingAcc{
         return m_minBalance;
     }
 
-    void setInterestRate(double rate){
+    void setInterestRate(double rate) override{
         m_interest = rate;
     }
 
     void setMinBalance(double amt){
         m_minBalance = amt;
     }
+
+    void setBalance(double amt) override{
+        m_balance = amt;
+    }
+    double getBalance() override{
+        return m_balance;
+    }
+
+    void addInterest(int time) override{
+      std::ofstream out("statements.txt", std::ios::app);
+          double irAmt = 0.0;
+
+          irAmt = m_balance * m_interest * time;
+          out << "ADDED INTEREST: " << irAmt << '\n';
+          out.close();
+
+          m_balance += irAmt;
+}
 
     protected:
     double m_interest;
@@ -106,22 +135,55 @@ class CheckingAdapter: public CheckingCompat {
   private:
     T&& obj_;
 };*/
+template<typename T>
+  class CheckingAdapter: public CheckingAcc {
+    public:
+      CheckingAdapter(T obj) : obj_(std::move(obj)) {}
+      virtual void writeCheck() override{
+        obj_.writeCheck();
+      }
+
+      virtual void deposit() override{};
+      virtual void print() const override{};
+      virtual void withdraw() override{};
+
+      virtual void setBalance(double amt) override {
+        obj_.setBalance(amt);
+      }
+      virtual double getBalance() override {
+        return obj_.getBalance();
+      }
+
+      virtual void setInterestRate(double amt) override{
+        obj_.setInterestRate(amt);
+      }
+
+      virtual double getInterestRate() override{
+        return obj_.getInterestRate();
+      }
+      virtual void addInterest(int time) override{
+        obj_.addInterest(time);
+      }
+
+    private:
+      T obj_;
+};
 
 class CheckingCompat {
  public:
   template<typename T>
-  CheckingCompat(T& obj):m_account(std::make_shared<CheckingAdapter<T>>(std::move(obj))) {}
+  CheckingCompat(T obj):m_account(std::make_shared<CheckingAdapter<T>>(std::move(obj))) {}
     virtual void setBalance(double amt) {
       m_account->setBalance(amt);
     }
     virtual double getBalance() {
-      m_account->getBalance();
+      return m_account->getBalance();
     }
-    virtual void getInterestRate(double amt) {
-      m_account->getInterestRate(amt);
+    virtual void getInterestRate() {
+      m_account->getInterestRate();
     }
-    virtual void calcInterest(int months) {
-      m_account->calcInterest(months);
+    virtual void addInterest(int time) {
+      m_account->addInterest(time);
     }
   ~CheckingCompat() {}
  private:
@@ -134,26 +196,7 @@ class CheckingCompat {
           return "thing: roll";
       }*/
   };
-  template<typename T>
-  class CheckingAdapter: public CheckingAcc {
-    public:
-      CheckingAdapter(T& obj) : obj_(std::move(obj)) {}
-      virtual void setBalance(double amt) override {
-        obj_.setBalance(amt);
-      }
-      virtual double getBalance() override {
-        obj_.getBalance();
-      }
-      virtual void getInterestRate(double amt) {
-        obj_.getInterestRate(amt);
-      }
-      virtual void calcInterest(int months) {
-        obj_.calcInterest(months);
-      }
-
-    private:
-      T& obj_;
-};
+  
 
 
 //int test() {
