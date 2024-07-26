@@ -4,10 +4,10 @@ GITHUB LINK: https://github.com/RyanDewey/BegalliTypeErasureProject/tree/master/
 
 We implemented type erasure through our NoServiceChargeChk, and HighInterestChk. We created CheckingCompat which acted as a wrapper
 using the functions:
-addInterest()
-setBalance()
-getBalance()
-getInterestRate()
+- addInterest()
+- setBalance()
+- getBalance()
+- getInterestRate()
 
 Type erasure code was implemented mainly in the following files:
 - noServiceChargeChk.h (holds all the relevant adapter, compat, and class definitions)
