@@ -16,14 +16,6 @@ class NoServiceChargeChk: public CheckingAcc{
     virtual void print()const override;
     virtual void writeCheck()override;
 
-    /*int test() {
-      //CheckingAdapter test1 = new CheckingAdapter(NoServiceChargeChk());
-      //CheckingAdapter test2 = new CheckingAdapter(NoServiceChargeChk());
-
-      CheckingCompat *t[] = {new CheckingAdapter(NoServiceChargeChk()),new CheckingAdapter(HighInterestChk())};
-      for(auto& x: t){
-        x->addInterest(1);
-    }*/
     double getMinBalance() const;
     double getInterestRate() override{
         return m_interest;
@@ -109,32 +101,6 @@ class HighInterestChk: public CheckingAcc{
 
 //----------
 
-/*class CheckingCompat {
-  public:
-    virtual void addInterest(int time) {
-        //define
-        return;
-    }
-    virtual ~CheckingCompat() {}
-};*/
-
-/*template<typename T>
-class CheckingAdapter: public CheckingCompat {
-  public:
-    CheckingAdapter(T&& obj) : obj_(std::move(obj)) {}
-    void addInterest(int time) override {
-        std::ofstream out("statements.txt", std::ios::app);
-        for(int i = 0; i < time; i++){
-            obj_.setBalance(obj_.getBalance() * (obj_.getInterestRate() + 1));
-            std::cout << "BALANCE FOR MONTH[" << i+1 << "]: " << obj_.getBalance() << '\n';
-            out << "BALANCE FOR MONTH[" << i+1 << "]: " << obj_->getBalance() << '\n';
-        }
-        out.close();
-    }
-    ~CheckingAdapter() {}
-  private:
-    T&& obj_;
-};*/
 template<typename T>
   class CheckingAdapter: public CheckingAcc {
     public:
@@ -188,24 +154,6 @@ class CheckingCompat {
   ~CheckingCompat() {}
  private:
   std::shared_ptr<CheckingAcc>m_account;
-  /*class CheckingBase {
-    public:
-      void setBalance(double);
-      virtual void calcInterest(int) = 0;
-      virtual std::string motion() const {
-          return "thing: roll";
-      }*/
   };
-  
-
-
-//int test() {
-/*CheckingAdapter test1 = new CheckingAdapter(NoServiceChargeChk());
-CheckingAdapter test2 = new CheckingAdapter(NoServiceChargeChk());
-
-CheckingCompat *t[] = {new CheckingAdapter(NoServiceChargeChk()),new CheckingAdapter(HighInterestChk())};
-for(auto& x: t){
-  x->addInterest(1);
-}*/
 
 #endif
