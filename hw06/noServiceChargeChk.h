@@ -1,3 +1,7 @@
+#ifndef CHECKINGACC_H
+#define CHECKINGACC_H
+
+#include <memory>
 #include "checkingAcc.h"
 
 class NoServiceChargeChk: public CheckingAcc{
@@ -12,6 +16,14 @@ class NoServiceChargeChk: public CheckingAcc{
     virtual void print()const override;
     virtual void writeCheck()override;
 
+    /*int test() {
+      //CheckingAdapter test1 = new CheckingAdapter(NoServiceChargeChk());
+      //CheckingAdapter test2 = new CheckingAdapter(NoServiceChargeChk());
+
+      CheckingCompat *t[] = {new CheckingAdapter(NoServiceChargeChk()),new CheckingAdapter(HighInterestChk())};
+      for(auto& x: t){
+        x->addInterest(1);
+    }*/
     double getMinBalance() const;
     double getInterestRate() const;
     
@@ -68,40 +80,89 @@ class HighInterestChk: public CheckingAcc{
 
 //----------
 
-class CheckingCompat {
+/*class CheckingCompat {
   public:
     virtual void addInterest(int time) {
-        // define here
+        //define
         return;
     }
     virtual ~CheckingCompat() {}
-};
+};*/
 
-template<typename T>
+/*template<typename T>
 class CheckingAdapter: public CheckingCompat {
   public:
-    CheckingAdapter(T& obj) : obj_(obj) {}
+    CheckingAdapter(T&& obj) : obj_(std::move(obj)) {}
     void addInterest(int time) override {
         std::ofstream out("statements.txt", std::ios::app);
         for(int i = 0; i < time; i++){
             obj_.setBalance(obj_.getBalance() * (obj_.getInterestRate() + 1));
             std::cout << "BALANCE FOR MONTH[" << i+1 << "]: " << obj_.getBalance() << '\n';
-            out << "BALANCE FOR MONTH[" << i+1 << "]: " << obj_.getBalance() << '\n';
+            out << "BALANCE FOR MONTH[" << i+1 << "]: " << obj_->getBalance() << '\n';
         }
         out.close();
     }
     ~CheckingAdapter() {}
   private:
-    T& obj_;
-};
-  
-int test() {
-  CheckingAdapter test1 = new CheckingAdapter(NoServiceChargeChk());
-  CheckingAdapter test2 = new CheckingAdapter(NoServiceChargeChk());
+    T&& obj_;
+};*/
 
-  CheckingCompat *t[] = {new CheckingAdapter(NoServiceChargeChk()),new CheckingAdapter(HighInterestChk())};
-  for(auto& x: t){
-    x->addInterest(1);
-  }
-  return 0;
-}
+class CheckingCompat {
+ public:
+  template<typename T>
+  CheckingCompat(T& obj):m_account(std::make_shared<CheckingAdapter<T>>(std::move(obj))) {}
+    virtual void setBalance(double amt) {
+      m_account->setBalance(amt);
+    }
+    virtual double getBalance() {
+      m_account->getBalance();
+    }
+    virtual void getInterestRate(double amt) {
+      m_account->getInterestRate(amt);
+    }
+    virtual void calcInterest(int months) {
+      m_account->calcInterest(months);
+    }
+  ~CheckingCompat() {}
+ private:
+  std::shared_ptr<CheckingAcc>m_account;
+  /*class CheckingBase {
+    public:
+      void setBalance(double);
+      virtual void calcInterest(int) = 0;
+      virtual std::string motion() const {
+          return "thing: roll";
+      }*/
+  };
+  template<typename T>
+  class CheckingAdapter: public CheckingAcc {
+    public:
+      CheckingAdapter(T& obj) : obj_(std::move(obj)) {}
+      virtual void setBalance(double amt) override {
+        obj_.setBalance(amt);
+      }
+      virtual double getBalance() override {
+        obj_.getBalance();
+      }
+      virtual void getInterestRate(double amt) {
+        obj_.getInterestRate(amt);
+      }
+      virtual void calcInterest(int months) {
+        obj_.calcInterest(months);
+      }
+
+    private:
+      T& obj_;
+};
+
+
+//int test() {
+/*CheckingAdapter test1 = new CheckingAdapter(NoServiceChargeChk());
+CheckingAdapter test2 = new CheckingAdapter(NoServiceChargeChk());
+
+CheckingCompat *t[] = {new CheckingAdapter(NoServiceChargeChk()),new CheckingAdapter(HighInterestChk())};
+for(auto& x: t){
+  x->addInterest(1);
+}*/
+
+#endif

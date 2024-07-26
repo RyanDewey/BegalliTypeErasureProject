@@ -1,9 +1,9 @@
 #include "noServiceChargeChk.h"
 
- HighInterestChk::HighInterestChk(){
+HighInterestChk::HighInterestChk(){
     m_interest = 0.1;
     m_minBalance = 1000.0;
- }
+}
 void HighInterestChk::deposit(){
         std::ofstream out("statements.txt", std::ios::out | std::ios::app);
         double depo = 0.0;

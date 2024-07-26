@@ -34,4 +34,4 @@ cd.o: cd.cpp
 	$(CC) $(CFLAGS) -c cd.cpp
 
 clean:
-	rm*.o output
+	rm *.o output

@@ -19,13 +19,30 @@ int main() {
 
     SavingsAcc s1;
     HighInterestSavings s2;
-    ServiceChargeChecking s3;
+    //ServiceChargeChecking s3;
     NoServiceChargeChk s4;
     HighInterestChk s5;
     CD s6;
 
+    //int test() {
+    //CheckingAdapter test1 = new CheckingAdapter(NoServiceChargeChk());
+    //CheckingAdapter test2 = new CheckingAdapter(HighInterestChk());
 
-    createAcc = mainScreen();
+    CheckingAdapter test1(s4);
+    CheckingAdapter test2(s5);
+
+    test1.setBalance(500);
+    test2.setBalance(1000);
+
+    std::cout << "Balance for test1: " << test1.getBalance();
+    std::cout << "Balance for test2: " << test2.getBalance(); 
+    /*CheckingCompat *t[] = {new CheckingAdapter(NoServiceChargeChk()),new CheckingAdapter(HighInterestChk())};
+    for(auto& x: t){
+      x->addInterest(1);
+    }*/
+
+
+    /*createAcc = mainScreen();
     while(createAcc != 2) {
 
         accChoice = accScreen();
@@ -234,5 +251,5 @@ int detailsScreenChecking() {
     std::cin.ignore();
     std::cout << '\n';
 
-    return detail;  
+    return detail;*/  
 }
